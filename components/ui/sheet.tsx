@@ -22,7 +22,8 @@ export function SheetTrigger({ asChild, children }: { asChild?: boolean; childre
   if (!ctx) return children
   const props = {
     onClick: (e: React.MouseEvent) => {
-      children.props.onClick?.(e)
+      const childProps = children.props as any
+      childProps.onClick?.(e)
       ctx.setOpen(true)
     },
   }

@@ -23,7 +23,7 @@ export function TooltipTrigger({ children }: { children: React.ReactElement }) {
   return React.cloneElement(children, {
     onMouseEnter: () => ctx.setOpen(true),
     onMouseLeave: () => ctx.setOpen(false),
-  })
+  } as any)
 }
 
 export function TooltipContent({ children }: { children: React.ReactNode }) {
