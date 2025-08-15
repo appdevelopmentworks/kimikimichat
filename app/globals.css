@@ -1,0 +1,25 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: theme(colors.base.DEFAULT);
+  --fg: theme(colors.base.fg);
+  --bubble-user: theme(colors.sakura.soft);
+  --bubble-ai: theme(colors.lavender.soft);
+  --accent: theme(colors.accent.DEFAULT);
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+}
+
+/* スクロールの余白やモバイルでのキーボード重なり対策 */
+.safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom);
+}
