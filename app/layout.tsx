@@ -13,11 +13,30 @@ export const metadata: Metadata = {
   appleWebApp: { title: 'Kimi Chat', statusBarStyle: 'default', capable: true },
   formatDetection: { telephone: false },
   themeColor: '#FAF7F2',
+  icons: {
+    icon: [
+      { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
+      { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
+      { url: '/icon-192.png', sizes: '192x192', type: 'image/png' },
+      { url: '/icon-512.png', sizes: '512x512', type: 'image/png' },
+    ],
+    apple: [
+      { url: '/apple-touch-icon.png', sizes: '180x180' },
+    ],
+  },
   openGraph: {
     title: 'Kimi Chat',
     description: 'やさしい会話体験をどうぞ。',
     type: 'website',
     url: 'https://example.com',
+    images: [
+      {
+        url: '/icon-512.png',
+        width: 512,
+        height: 512,
+        alt: 'Kimi Chat',
+      },
+    ],
   },
 }
 
