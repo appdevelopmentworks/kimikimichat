@@ -34,9 +34,27 @@ export function SheetContent({ side = 'right', className = '', children }: { sid
   const ctx = React.useContext(SheetContext)
   const onClose = () => ctx?.setOpen(false)
 
-  if (!ctx?.open) return null
+  // Keep mounted for exit animation
+  const [render, setRender] = React.useState(!!ctx?.open)
+  const [show, setShow] = React.useState(!!ctx?.open)
 
-  const basePanel = 'fixed z-50 bg-white shadow-xl border border-black/10 overflow-y-auto'
+  React.useEffect(() => {
+    if (!ctx) return
+    if (ctx.open) {
+      setRender(true)
+      // next frame to ensure transition
+      const id = requestAnimationFrame(() => setShow(true))
+      return () => cancelAnimationFrame(id)
+    } else {
+      setShow(false)
+      const t = setTimeout(() => setRender(false), 220)
+      return () => clearTimeout(t)
+    }
+  }, [ctx?.open])
+
+  if (!render) return null
+
+  const basePanel = 'fixed z-50 bg-white shadow-xl border border-black/10 overflow-y-auto transition-transform duration-200 ease-out will-change-transform'
   // Responsive positions: on small screens, side sheets behave like a bottom sheet.
   const panelPos =
     side === 'left'
@@ -57,10 +75,38 @@ export function SheetContent({ side = 'right', className = '', children }: { sid
       ? 'top-0 left-0 w-dvw h-[70vh] rounded-b-2xl'
       : 'bottom-0 left-0 w-dvw h-[70vh] rounded-t-2xl'
 
+  // Enter/exit transforms
+  const hiddenTf =
+    side === 'left'
+      ? 'translate-y-full sm:translate-y-0 sm:-translate-x-full'
+      : side === 'right'
+      ? 'translate-y-full sm:translate-y-0 sm:translate-x-full'
+      : side === 'top'
+      ? '-translate-y-full'
+      : 'translate-y-full'
+  const showTf =
+    side === 'top' || side === 'bottom'
+      ? 'translate-y-0'
+      : 'translate-y-0 sm:translate-x-0'
+
   return (
     <>
-      <div className="fixed inset-0 z-40 bg-black/30 sm:bg-black/20" onClick={onClose} />
-      <div className={[basePanel, panelPos, className].join(' ')}>
+      <div
+        className={[
+          'fixed inset-0 z-40 transition-opacity duration-200',
+          'bg-black/30 sm:bg-black/20',
+          show ? 'opacity-100' : 'opacity-0',
+        ].join(' ')}
+        onClick={onClose}
+      />
+      <div className={[basePanel, panelPos, show ? showTf : hiddenTf, className].join(' ')}>
+        <button
+          aria-label="閉じる"
+          onClick={onClose}
+          className="absolute right-3 top-3 z-[60] rounded-md p-2 text-slate-600 hover:bg-black/5 focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/40"
+        >
+          ✕
+        </button>
         {children}
       </div>
     </>
