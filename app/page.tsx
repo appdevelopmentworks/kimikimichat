@@ -180,11 +180,11 @@ function SettingsSheet({ temperature, setTemperature, maxTokens, setMaxTokens, e
       <SheetTrigger asChild>
         <Button variant="ghost" title="設定"><Settings2 className="h-5 w-5"/></Button>
       </SheetTrigger>
-      <SheetContent side="right" className="w-[360px] sm:w-[420px]">
+      <SheetContent side="right">
         <SheetHeader>
           <SheetTitle>設定</SheetTitle>
         </SheetHeader>
-        <div className="mt-4 space-y-4">
+        <div className="mt-4 space-y-4 px-4 pb-6 break-words">
           <div className="space-y-2">
             <Label>温度（創造性）: {temperature.toFixed(2)}</Label>
             <input type="range" min={0} max={1} step={0.05} value={temperature}
@@ -203,10 +203,10 @@ function SettingsSheet({ temperature, setTemperature, maxTokens, setMaxTokens, e
 
           <div className="space-y-2">
             <Label>絵文字の強さ</Label>
-            <div className="flex items-center gap-3 text-sm">
-              <label className="inline-flex items-center gap-2"><input type="radio" name="emoji" onChange={()=>setEmojiMode('low')} checked={emojiMode==='low'} />控えめ</label>
-              <label className="inline-flex items-center gap-2"><input type="radio" name="emoji" onChange={()=>setEmojiMode('normal')} checked={emojiMode==='normal'} />普通</label>
-              <label className="inline-flex items-center gap-2"><input type="radio" name="emoji" onChange={()=>setEmojiMode('high')} checked={emojiMode==='high'} />多め</label>
+            <div className="flex flex-wrap items-center gap-3 gap-y-2 text-sm">
+              <label className="inline-flex items-center gap-2 min-w-0"><input type="radio" name="emoji" onChange={()=>setEmojiMode('low')} checked={emojiMode==='low'} />控えめ</label>
+              <label className="inline-flex items-center gap-2 min-w-0"><input type="radio" name="emoji" onChange={()=>setEmojiMode('normal')} checked={emojiMode==='normal'} />普通</label>
+              <label className="inline-flex items-center gap-2 min-w-0"><input type="radio" name="emoji" onChange={()=>setEmojiMode('high')} checked={emojiMode==='high'} />多め</label>
             </div>
           </div>
         </div>

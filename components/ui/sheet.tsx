@@ -36,19 +36,30 @@ export function SheetContent({ side = 'right', className = '', children }: { sid
 
   if (!ctx?.open) return null
 
-  const basePanel = 'fixed bg-white shadow-xl border border-black/10'
+  const basePanel = 'fixed z-50 bg-white shadow-xl border border-black/10 overflow-y-auto'
+  // Responsive positions: on small screens, side sheets behave like a bottom sheet.
   const panelPos =
     side === 'left'
-      ? 'left-0 top-0 h-dvh w-[90vw] max-w-sm rounded-r-2xl'
+      ? [
+          // mobile: bottom sheet style
+          'left-0 right-0 bottom-0 top-auto w-dvw h-[85dvh] rounded-t-2xl',
+          // ≥sm: left drawer
+          'sm:left-0 sm:top-0 sm:bottom-auto sm:right-auto sm:h-dvh sm:w-[90vw] sm:max-w-sm sm:rounded-r-2xl',
+        ].join(' ')
       : side === 'right'
-      ? 'right-0 top-0 h-dvh w-[90vw] max-w-sm rounded-l-2xl'
+      ? [
+          // mobile: bottom sheet style
+          'left-0 right-0 bottom-0 top-auto w-dvw h-[85dvh] rounded-t-2xl',
+          // ≥sm: right drawer
+          'sm:right-0 sm:top-0 sm:bottom-auto sm:left-auto sm:h-dvh sm:w-[420px] sm:rounded-l-2xl',
+        ].join(' ')
       : side === 'top'
       ? 'top-0 left-0 w-dvw h-[70vh] rounded-b-2xl'
       : 'bottom-0 left-0 w-dvw h-[70vh] rounded-t-2xl'
 
   return (
     <>
-      <div className="fixed inset-0 bg-black/20" onClick={onClose} />
+      <div className="fixed inset-0 z-40 bg-black/30 sm:bg-black/20" onClick={onClose} />
       <div className={[basePanel, panelPos, className].join(' ')}>
         {children}
       </div>

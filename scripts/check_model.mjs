@@ -1,7 +1,7 @@
 import OpenAI from 'openai'
 
 const apiKey = process.env.GROQ_API_KEY
-const modelId = process.env.MODEL_ID || 'moonshotai/kimi-k2-instruct'
+const modelId = process.env.MODEL_ID || 'moonshotai/kimi-k2-instruct-0905'
 
 if (!apiKey) {
   console.error('GROQ_API_KEY not set in environment')

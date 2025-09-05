@@ -6,4 +6,4 @@ export const openai = new OpenAI({
   baseURL: 'https://api.groq.com/openai/v1',
 })
 
-export const MODEL_ID = process.env.MODEL_ID || 'moonshotai/kimi-k2-instruct'
+export const MODEL_ID = process.env.MODEL_ID || 'moonshotai/kimi-k2-instruct-0905'
