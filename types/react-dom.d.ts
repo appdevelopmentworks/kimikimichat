@@ -1,9 +1,6 @@
-import * as React from 'react'
-
 declare module 'react-dom' {
   export function createPortal(
-    children: React.ReactNode,
+    children: any,
     container: Element | DocumentFragment
-  ): React.ReactPortal
+  ): any
 }
-
