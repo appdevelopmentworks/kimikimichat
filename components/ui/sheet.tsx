@@ -97,9 +97,12 @@ export function SheetContent({ side = 'right', className = '', children }: { sid
           'bg-black/30 sm:bg-black/20',
           show ? 'opacity-100' : 'opacity-0',
         ].join(' ')}
-        onClick={onClose}
+        onMouseDown={onClose}
       />
-      <div className={[basePanel, panelPos, show ? showTf : hiddenTf, className].join(' ')}>
+      <div
+        className={[basePanel, panelPos, show ? showTf : hiddenTf, className].join(' ')}
+        onMouseDown={(e) => e.stopPropagation()}
+      >
         <button
           aria-label="閉じる"
           onClick={onClose}
