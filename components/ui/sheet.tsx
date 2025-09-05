@@ -34,9 +34,10 @@ export function SheetContent({ side = 'right', className = '', children }: { sid
   const ctx = React.useContext(SheetContext)
   const onClose = () => ctx?.setOpen(false)
 
-  // Keep mounted for exit animation
+  // Keep mounted for exit animation and guard initial tap
   const [render, setRender] = React.useState(!!ctx?.open)
   const [show, setShow] = React.useState(!!ctx?.open)
+  const [canInteract, setCanInteract] = React.useState(false)
 
   React.useEffect(() => {
     if (!ctx) return
@@ -44,9 +45,12 @@ export function SheetContent({ side = 'right', className = '', children }: { sid
       setRender(true)
       // next frame to ensure transition
       const id = requestAnimationFrame(() => setShow(true))
-      return () => cancelAnimationFrame(id)
+      setCanInteract(false)
+      const inter = setTimeout(() => setCanInteract(true), 160)
+      return () => { cancelAnimationFrame(id); clearTimeout(inter) }
     } else {
       setShow(false)
+      setCanInteract(false)
       const t = setTimeout(() => setRender(false), 220)
       return () => clearTimeout(t)
     }
@@ -96,12 +100,16 @@ export function SheetContent({ side = 'right', className = '', children }: { sid
           'fixed inset-0 z-40 transition-opacity duration-200',
           'bg-black/30 sm:bg-black/20',
           show ? 'opacity-100' : 'opacity-0',
+          canInteract ? '' : 'pointer-events-none',
         ].join(' ')}
-        onMouseDown={onClose}
+        onPointerDown={() => {
+          if (!canInteract) return
+          onClose()
+        }}
       />
       <div
         className={[basePanel, panelPos, show ? showTf : hiddenTf, className].join(' ')}
-        onMouseDown={(e) => e.stopPropagation()}
+        onPointerDown={(e) => e.stopPropagation()}
       >
         <button
           aria-label="閉じる"
