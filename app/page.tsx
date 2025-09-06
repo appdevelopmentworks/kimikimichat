@@ -123,8 +123,8 @@ export default function Page() {
       </header>
 
       <main className="flex-1">
-        <div className="max-w-3xl mx-auto px-3 pt-4 pb-2 md:pb-3">
-          <ScrollArea className="h-[calc(100dvh-220px)] rounded-2xl bg-white/70 pt-4 px-4 pb-2 md:pb-3 shadow-soft">
+        <div className="max-w-3xl mx-auto px-3 pt-4 pb-0">
+          <ScrollArea className="h-[calc(100dvh-220px)] rounded-2xl bg-white/70 pt-4 px-4 pb-4 shadow-soft">
             <div className="space-y-2 sm:space-y-3">
               {messages.length === 0 && (
                 <Card className="bg-white/80">
