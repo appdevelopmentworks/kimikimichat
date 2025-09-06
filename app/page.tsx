@@ -1,5 +1,6 @@
  'use client'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
@@ -11,6 +12,7 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 import { Separator } from '@/components/ui/separator'
 import { Switch } from '@/components/ui/switch'
 import { Logo } from '@/components/logo'
+import { loadTemperature, saveTemperature, loadMaxTokens, saveMaxTokens, loadEmojiMode, saveEmojiMode, type EmojiMode } from '@/lib/settings'
 import { Trash2, Settings2, Send, Copy } from 'lucide-react'
 
 // 型
@@ -24,9 +26,9 @@ export default function Page() {
   const [messages, setMessages] = useState<Msg[]>(() => [])
   const [input, setInput] = useState('')
   const [busy, setBusy] = useState(false)
-  const [temperature, setTemperature] = useState(0.4)
-  const [maxTokens, setMaxTokens] = useState<number | undefined>(undefined)
-  const [emojiMode, setEmojiMode] = useState<'normal'|'low'|'high'>('normal')
+  const [temperature, setTemperature] = useState<number>(() => loadTemperature(0.4))
+  const [maxTokens, setMaxTokens] = useState<number | undefined>(() => loadMaxTokens(undefined))
+  const [emojiMode, setEmojiMode] = useState<EmojiMode>(() => loadEmojiMode('normal'))
   const bottomRef = useRef<HTMLDivElement | null>(null)
 
   useEffect(() => {
@@ -41,6 +43,11 @@ export default function Page() {
   }, [messages])
 
   useEffect(() => { bottomRef.current?.scrollIntoView({ behavior: 'smooth' }) }, [messages])
+
+  // Persist settings changes
+  useEffect(() => { saveTemperature(temperature) }, [temperature])
+  useEffect(() => { saveMaxTokens(maxTokens) }, [maxTokens])
+  useEffect(() => { saveEmojiMode(emojiMode) }, [emojiMode])
 
   const systemPrompt = useMemo(() => (
     'あなたは思いやりのあるアシスタントです。語尾は丁寧でやさしく、女性好みの表現を心がけます。' +
@@ -175,6 +182,23 @@ function SettingsSheet({ temperature, setTemperature, maxTokens, setMaxTokens, e
   maxTokens?: number; setMaxTokens: (n:number|undefined)=>void;
   emojiMode: 'normal'|'low'|'high'; setEmojiMode: (v:'normal'|'low'|'high')=>void;
 }) {
+  const router = useRouter()
+  const [isMobile, setIsMobile] = useState(false)
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 639px)')
+    const update = () => setIsMobile(mq.matches)
+    update()
+    mq.addEventListener('change', update)
+    return () => mq.removeEventListener('change', update)
+  }, [])
+
+  if (isMobile) {
+    return (
+      <Button variant="ghost" title="設定" onClick={() => router.push('/settings')}>
+        <Settings2 className="h-5 w-5"/>
+      </Button>
+    )
+  }
   return (
     <Sheet>
       <SheetTrigger asChild>
